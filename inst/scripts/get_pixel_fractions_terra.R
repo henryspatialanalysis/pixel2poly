@@ -1,3 +1,9 @@
+## #######################################################################################
+## 
+## BUILD AGGREGATION TABLES USING TERRA PACKAGE FUNCTIONS
+## 
+## #######################################################################################
+
 library(terra); library(data.table)
 
 ## Get pixel fractions contained within a particular polygon
