@@ -1,10 +1,18 @@
 Package: pixel2poly
-Title: What the Package Does (One Line, Title Case)
+Title: Aggregate from pixels to polygons
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Nathaniel", "Henry", , "nat@henryspatialanalysis.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8150-4988"))
+Description: >
+    Aggregate from pixels to polygons using functions in the `terra` package. Allows for
+    fractional pixel aggregation, stacked rasters, and fractional pixel weighting (for
+    example, population-weighted aggregation).
+Depends:
+    R (>= 4.1.0),
+Imports:
+    assertthat,
+    terra
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
