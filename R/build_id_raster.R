@@ -26,9 +26,12 @@ build_id_raster <- function(polygons, template_raster = NULL){
 
   # Set ID raster extent
   id_raster <- terra::crop(x = template_raster, y = polygons, snap = 'out')
-
   # Fill values of the ID raster
   terra::values(id_raster) <- seq_len(prod(dim(id_raster)))
+  # Drop pixels that do not overlap the polygons
+  id_raster <- terra::mask(
+    x = id_raster, mask = polygons, touches = T, updatevalue = NA_integer_
+  )
 
   return(id_raster)
 }
