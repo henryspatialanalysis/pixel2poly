@@ -4,7 +4,7 @@
 \alias{build_aggregation_table}
 \title{Build aggregation table}
 \usage{
-build_aggregation_table(polygons, id_raster, polygon_id_field, moe = 1e-04)
+build_aggregation_table(polygons, id_raster, polygon_id_field)
 }
 \arguments{
 \item{polygons}{terra SpatVector object. Should contain a unique ID field.}
@@ -13,18 +13,15 @@ build_aggregation_table(polygons, id_raster, polygon_id_field, moe = 1e-04)
 the polygons object. Should have the same CRS as \code{polygons} and completely cover it.}
 
 \item{polygon_id_field}{(character) Unique identifier field in \code{polygons}.}
-
-\item{moe}{(numeric, default 1e-4) Margin of error for pixel area fractions summing to
-approximately 1. If the sum of all pixel fractions across polygons is within
-\link{1 - moe, 1 + moe}, the function will adjust the sum to exactly 1. Set to zero for
-no margin of error adjustment.}
 }
 \value{
-data.table containing three columns:
+data.table with fields:
 \itemize{
+\item polygon_id: Unique polygon identifier
 \item pixel_id: unique pixel ID from the ID raster
+\item masked_pixel_id: Index counting only non-NA pixels from the ID raster
 \item area_fraction: fraction of the pixel area falling within this polygon
-\item Polygon identifiers taken from polygon_id_field
+\item Merged fields from the table of polygons
 }
 }
 \description{

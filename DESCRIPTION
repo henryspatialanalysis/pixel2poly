@@ -9,9 +9,11 @@ Description: >
     fractional pixel aggregation, stacked rasters, and fractional pixel weighting (for
     example, population-weighted aggregation).
 Depends:
-    R (>= 4.1.0),
+    R (>= 4.1.0)
 Imports:
     assertthat,
+    data.table,
+    glue,
     terra
 License: MIT + file LICENSE
 Encoding: UTF-8
