@@ -13,8 +13,8 @@ test_vec <- terra::vect(system.file("ex/lux.shp", package="terra"))
 moe <- 1e-4
 
 # Build ID raster and aggregation table
-id_raster <- build_id_raster(polygons = test_vec)
-agg_table <- build_aggregation_table(
+id_raster <- pixel2poly::build_id_raster(polygons = test_vec)
+agg_table <- pixel2poly::build_aggregation_table(
   polygons = test_vec,
   id_raster = id_raster,
   polygon_id_field = 'ID_2'
@@ -51,6 +51,12 @@ draws_matrix_single_year <- matrix(rnorm(n_draws * n_px), nrow = n_px, ncol = n_
 # Multiple years of draws
 draws_matrix_multi_year <- lapply(z_dim, function(x) draws_matrix_single_year) |>
   data.table::rbindlist()
+
+# Test inserting the draws matrix into the ID raster
+draws_rast <- pixel2poly::values_to_raster(
+  x = draws_matrix_single_year,
+  id_raster = id_raster
+)
 
 
 ## Test raster to polygon aggregation: Single year of data ------------------------------>
