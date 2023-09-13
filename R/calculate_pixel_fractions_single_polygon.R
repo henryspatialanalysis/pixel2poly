@@ -36,8 +36,9 @@ calculate_pixel_fractions_single_polygon <- function(polygon, id_raster, polygon
     x = id_raster,
     y = polygon,
     fun = 'table',
-    exact = TRUE
-  )[, -1]
+    exact = TRUE,
+    ID = FALSE
+  )
   # Reshape long
   extract_long <- data.table::data.table(
     pixel_id = colnames(extract_wide) |> as.integer(),

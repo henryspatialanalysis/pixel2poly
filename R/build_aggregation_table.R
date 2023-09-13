@@ -70,13 +70,26 @@ build_aggregation_table <- function(polygons, id_raster, polygon_id_field){
     polygon_ids = poly_ids
   )
 
+  # Crop the polygons to the id raster
+  polygons_cropped <- terra::crop(x = polygons, y = id_raster, ext = TRUE)
+  poly_ids <- polys_dt[[polygon_id_field]]
+
   # Build the aggregation table by calling zonal statistics for each polygon
   agg_table <- lapply(poly_ids, function(poly_id){
-    calculate_pixel_fractions_single_polygon(
-      polygon = polygons[poly_ids == poly_id, ],
-      id_raster = id_raster,
+    # Create smaller spatial objects for calculating fractional zonal statistics
+    message('.', appendLF = F)
+    one_poly <- polygons_cropped[poly_ids == poly_id, ]
+    id_raster_sub <- terra::crop(x = id_raster, y = one_poly, ext = TRUE, snap = 'out')
+    # Mask missing values with -1
+    terra::values(id_raster_sub)[which(is.na(terra::values(id_raster_sub, mat = F)))] <- -1
+    # Get fractional pixel areas for the polygon
+    pixel_fractions <- calculate_pixel_fractions_single_polygon(
+      polygon = one_poly,
+      id_raster = id_raster_sub,
       polygon_id = poly_id
     )
+    # Drop -1 (masked) pixel IDs and return
+    return(pixel_fractions[pixel_id >= 0, ])
   }) |> data.table::rbindlist()
 
   # Merge on 'masked_pixel_id'
