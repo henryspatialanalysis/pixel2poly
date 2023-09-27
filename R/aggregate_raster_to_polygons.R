@@ -164,8 +164,8 @@ aggregate_raster_to_polygons <- function(
   px_table$z__ <- rep(z_dimension, each = terra::ncell(data_raster))
   # Optionally add weights
   need_weights <- grepl('^weighted\\.', method)
-  weights_num_z <- terra::nlyr(weighting_raster)
   if(need_weights){
+    weights_num_z <- terra::nlyr(weighting_raster)
     if(num_z == weights_num_z){
       px_table$w__ <- terra::values(weighting_raster, mat = F)
     } else if(weights_num_z == 1){
