@@ -4,7 +4,7 @@
 \alias{build_aggregation_table}
 \title{Build aggregation table}
 \usage{
-build_aggregation_table(polygons, id_raster, polygon_id_field)
+build_aggregation_table(polygons, id_raster, polygon_id_field, verbose = TRUE)
 }
 \arguments{
 \item{polygons}{terra SpatVector object. Should contain a unique ID field.}
@@ -13,6 +13,8 @@ build_aggregation_table(polygons, id_raster, polygon_id_field)
 the polygons object. Should have the same CRS as \code{polygons} and completely cover it.}
 
 \item{polygon_id_field}{(character) Unique identifier field in \code{polygons}.}
+
+\item{verbose}{(logical) Show progress for building aggregation rows for each polygon?}
 }
 \value{
 data.table with fields:

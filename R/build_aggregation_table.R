@@ -45,6 +45,7 @@ build_aggregation_table_validation <- function(
 #' @param id_raster terra SpatRaster object. ID raster created by `build_id_raster()` for
 #'   the polygons object. Should have the same CRS as `polygons` and completely cover it.
 #' @param polygon_id_field (character) Unique identifier field in `polygons`.
+#' @param verbose (logical) Show progress for building aggregation rows for each polygon?
 #' 
 #' @return data.table with fields:
 #'   * polygon_id: Unique polygon identifier
@@ -57,7 +58,7 @@ build_aggregation_table_validation <- function(
 #' 
 #' @import data.table
 #' @export
-build_aggregation_table <- function(polygons, id_raster, polygon_id_field){
+build_aggregation_table <- function(polygons, id_raster, polygon_id_field, verbose = TRUE){
 
   polys_dt <- as.data.table(polygons)
   poly_ids <- polys_dt[[polygon_id_field]]
@@ -77,7 +78,7 @@ build_aggregation_table <- function(polygons, id_raster, polygon_id_field){
   # Build the aggregation table by calling zonal statistics for each polygon
   agg_table <- lapply(poly_ids, function(poly_id){
     # Create smaller spatial objects for calculating fractional zonal statistics
-    message('.', appendLF = F)
+    if(verbose) message('.', appendLF = F)
     one_poly <- polygons_cropped[poly_ids == poly_id, ]
     id_raster_sub <- terra::crop(x = id_raster, y = one_poly, ext = TRUE, snap = 'out')
     # Mask missing values with -1
@@ -91,6 +92,8 @@ build_aggregation_table <- function(polygons, id_raster, polygon_id_field){
     # Drop -1 (masked) pixel IDs and return
     return(pixel_fractions[pixel_id >= 0, ])
   }) |> data.table::rbindlist()
+  # Add a newline to finish off the progress bar, if needed
+  if(verbose) message("")
 
   # Merge on 'masked_pixel_id'
   masked_pixel_table <- data.table::data.table(
